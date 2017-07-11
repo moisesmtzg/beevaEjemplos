@@ -1,7 +1,10 @@
 package com.beeva.proyectoBanco.implementacion;
 
+import java.util.ArrayList;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
@@ -23,16 +26,19 @@ public class BancoDAOImplementacion extends BancoDAO{
 	}
 
 	@Override
+	@Transactional
 	public Banco obtenerBanco(int idBanco) {
 		Banco b = em.find(Banco.class, idBanco);
 		return b;
 	}
 
 	@Override
+	@Transactional
 	public void eliminarBanco(int idBanco) {
 		Banco b = obtenerBanco(idBanco);
 		em.remove(b);
 		
 	}
+
 
 }

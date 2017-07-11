@@ -12,32 +12,36 @@ import java.math.BigDecimal;
  * 
  */
 @Entity
+@Table(name="cuenta")
 @NamedQuery(name="Cuenta.findAll", query="SELECT c FROM Cuenta c")
 public class Cuenta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int idCuenta;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int idcuenta;
 
 	private BigDecimal balance;
 
-	private int idTipoCuenta;
-
 	//bi-directional many-to-one association to Cliente
-	@ManyToOne
-	@JoinColumn(name="idCliente")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="idcliente")
 	private Cliente cliente;
+
+	//bi-directional many-to-one association to Tipocuenta
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="idtipocuenta")
+	private Tipocuenta tipocuenta;
 
 	public Cuenta() {
 	}
 
-	public int getIdCuenta() {
-		return this.idCuenta;
+	public int getIdcuenta() {
+		return this.idcuenta;
 	}
 
-	public void setIdCuenta(int idCuenta) {
-		this.idCuenta = idCuenta;
+	public void setIdcuenta(int idcuenta) {
+		this.idcuenta = idcuenta;
 	}
 
 	public BigDecimal getBalance() {
@@ -48,20 +52,20 @@ public class Cuenta implements Serializable {
 		this.balance = balance;
 	}
 
-	public int getIdTipoCuenta() {
-		return this.idTipoCuenta;
-	}
-
-	public void setIdTipoCuenta(int idTipoCuenta) {
-		this.idTipoCuenta = idTipoCuenta;
-	}
-
 	public Cliente getCliente() {
 		return this.cliente;
 	}
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public Tipocuenta getTipocuenta() {
+		return this.tipocuenta;
+	}
+
+	public void setTipocuenta(Tipocuenta tipocuenta) {
+		this.tipocuenta = tipocuenta;
 	}
 
 }

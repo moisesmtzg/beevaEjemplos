@@ -7,4 +7,4 @@ public abstract class BancoDAO {
 	public abstract Banco agregarBanco(Banco b);
 	public abstract Banco obtenerBanco(int idBanco);
 	public abstract void eliminarBanco(int idBanco);
-}
+} 

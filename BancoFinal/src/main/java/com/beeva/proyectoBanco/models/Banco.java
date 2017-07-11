@@ -12,59 +12,66 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="banco")
 @NamedQuery(name="Banco.findAll", query="SELECT b FROM Banco b")
 public class Banco implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int idBanco;
+	private int idbanco;
 
-	private String nombreBanco;
+	private String nombre;
 
-	//bi-directional many-to-one association to Bancocliente
+	//bi-directional many-to-one association to Bancoscliente
 	@OneToMany(mappedBy="banco")
-	private List<Bancocliente> bancoclientes;
+	private List<Bancoscliente> bancosclientes;
 
 	public Banco() {
 	}
 
-	public int getIdBanco() {
-		return this.idBanco;
+	public int getIdbanco() {
+		return this.idbanco;
 	}
 
-	public void setIdBanco(int idBanco) {
-		this.idBanco = idBanco;
+	public void setIdbanco(int idbanco) {
+		this.idbanco = idbanco;
 	}
 
-	public String getNombreBanco() {
-		return this.nombreBanco;
+	public String getNombre() {
+		return this.nombre;
 	}
 
-	public void setNombreBanco(String nombreBanco) {
-		this.nombreBanco = nombreBanco;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
-	public List<Bancocliente> getBancoclientes() {
-		return this.bancoclientes;
+	public List<Bancoscliente> getBancosclientes() {
+		return this.bancosclientes;
 	}
 
-	public void setBancoclientes(List<Bancocliente> bancoclientes) {
-		this.bancoclientes = bancoclientes;
+	public void setBancosclientes(List<Bancoscliente> bancosclientes) {
+		this.bancosclientes = bancosclientes;
 	}
 
-	public Bancocliente addBancocliente(Bancocliente bancocliente) {
-		getBancoclientes().add(bancocliente);
-		bancocliente.setBanco(this);
+	public Bancoscliente addBancoscliente(Bancoscliente bancoscliente) {
+		getBancosclientes().add(bancoscliente);
+		bancoscliente.setBanco(this);
 
-		return bancocliente;
+		return bancoscliente;
 	}
 
-	public Bancocliente removeBancocliente(Bancocliente bancocliente) {
-		getBancoclientes().remove(bancocliente);
-		bancocliente.setBanco(null);
+	public Bancoscliente removeBancoscliente(Bancoscliente bancoscliente) {
+		getBancosclientes().remove(bancoscliente);
+		bancoscliente.setBanco(null);
 
-		return bancocliente;
+		return bancoscliente;
 	}
 
+	@Override
+	public String toString() {
+		return "Banco [idbanco=" + idbanco + ", nombre=" + nombre
+				+ ", bancosclientes=" + bancosclientes + "]";
+	}
+
+	
 }

@@ -12,23 +12,21 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="cliente")
 @NamedQuery(name="Cliente.findAll", query="SELECT c FROM Cliente c")
 public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int idCliente;
+	private int idcliente;
 
 	private String apellido;
 
-	private int idTipoCuenta;
-
 	private String nombre;
 
-	//bi-directional many-to-one association to Bancocliente
+	//bi-directional many-to-one association to Bancoscliente
 	@OneToMany(mappedBy="cliente")
-	private List<Bancocliente> bancoclientes;
+	private List<Bancoscliente> bancosclientes;
 
 	//bi-directional many-to-one association to Cuenta
 	@OneToMany(mappedBy="cliente")
@@ -37,12 +35,12 @@ public class Cliente implements Serializable {
 	public Cliente() {
 	}
 
-	public int getIdCliente() {
-		return this.idCliente;
+	public int getIdcliente() {
+		return this.idcliente;
 	}
 
-	public void setIdCliente(int idCliente) {
-		this.idCliente = idCliente;
+	public void setIdcliente(int idcliente) {
+		this.idcliente = idcliente;
 	}
 
 	public String getApellido() {
@@ -53,14 +51,6 @@ public class Cliente implements Serializable {
 		this.apellido = apellido;
 	}
 
-	public int getIdTipoCuenta() {
-		return this.idTipoCuenta;
-	}
-
-	public void setIdTipoCuenta(int idTipoCuenta) {
-		this.idTipoCuenta = idTipoCuenta;
-	}
-
 	public String getNombre() {
 		return this.nombre;
 	}
@@ -69,26 +59,26 @@ public class Cliente implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public List<Bancocliente> getBancoclientes() {
-		return this.bancoclientes;
+	public List<Bancoscliente> getBancosclientes() {
+		return this.bancosclientes;
 	}
 
-	public void setBancoclientes(List<Bancocliente> bancoclientes) {
-		this.bancoclientes = bancoclientes;
+	public void setBancosclientes(List<Bancoscliente> bancosclientes) {
+		this.bancosclientes = bancosclientes;
 	}
 
-	public Bancocliente addBancocliente(Bancocliente bancocliente) {
-		getBancoclientes().add(bancocliente);
-		bancocliente.setCliente(this);
+	public Bancoscliente addBancoscliente(Bancoscliente bancoscliente) {
+		getBancosclientes().add(bancoscliente);
+		bancoscliente.setCliente(this);
 
-		return bancocliente;
+		return bancoscliente;
 	}
 
-	public Bancocliente removeBancocliente(Bancocliente bancocliente) {
-		getBancoclientes().remove(bancocliente);
-		bancocliente.setCliente(null);
+	public Bancoscliente removeBancoscliente(Bancoscliente bancoscliente) {
+		getBancosclientes().remove(bancoscliente);
+		bancoscliente.setCliente(null);
 
-		return bancocliente;
+		return bancoscliente;
 	}
 
 	public List<Cuenta> getCuentas() {
