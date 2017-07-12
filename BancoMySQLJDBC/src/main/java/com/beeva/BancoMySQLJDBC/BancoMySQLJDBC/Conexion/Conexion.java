@@ -1,4 +1,4 @@
-package Conexion;
+package com.beeva.BancoMySQLJDBC.BancoMySQLJDBC.Conexion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

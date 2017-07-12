@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Conexion.Conexion;
+import com.beeva.BancoMySQLJDBC.BancoMySQLJDBC.Conexion.*;
 
 public class Banco {
 	

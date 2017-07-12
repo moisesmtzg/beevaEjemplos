@@ -28,6 +28,7 @@ public class ClienteDAOImplementacion extends ClienteDAO{
 	@Transactional
 	public Cliente saveCliente(Cliente c) {
 		em.persist(c);
+		em.flush();
 		return c;
 	}
 

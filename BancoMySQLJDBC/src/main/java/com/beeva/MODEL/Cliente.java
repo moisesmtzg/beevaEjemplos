@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import Conexion.Conexion;
+import com.beeva.BancoMySQLJDBC.BancoMySQLJDBC.Conexion.*;
 
 public class Cliente {
 

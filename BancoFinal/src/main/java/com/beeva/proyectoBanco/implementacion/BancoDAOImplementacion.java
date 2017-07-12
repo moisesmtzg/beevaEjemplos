@@ -22,6 +22,7 @@ public class BancoDAOImplementacion extends BancoDAO{
 	@Transactional
 	public Banco agregarBanco(Banco b) {
 		em.persist(b);
+		//em.flush();
 		return b;
 	}
 

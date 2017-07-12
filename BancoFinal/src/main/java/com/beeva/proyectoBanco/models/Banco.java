@@ -18,6 +18,7 @@ public class Banco implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idbanco;
 
 	private String nombre;
@@ -33,10 +34,7 @@ public class Banco implements Serializable {
 		return this.idbanco;
 	}
 
-	public void setIdbanco(int idbanco) {
-		this.idbanco = idbanco;
-	}
-
+	
 	public String getNombre() {
 		return this.nombre;
 	}

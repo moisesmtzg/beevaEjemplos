@@ -18,6 +18,7 @@ public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idcliente;
 
 	private String apellido;
@@ -25,11 +26,11 @@ public class Cliente implements Serializable {
 	private String nombre;
 
 	//bi-directional many-to-one association to Bancoscliente
-	@OneToMany(mappedBy="cliente")
+	@OneToMany(cascade= {CascadeType.MERGE},mappedBy="cliente")
 	private List<Bancoscliente> bancosclientes;
 
 	//bi-directional many-to-one association to Cuenta
-	@OneToMany(mappedBy="cliente")
+	@OneToMany(cascade= {CascadeType.MERGE},mappedBy="cliente")
 	private List<Cuenta> cuentas;
 
 	public Cliente() {
@@ -37,10 +38,6 @@ public class Cliente implements Serializable {
 
 	public int getIdcliente() {
 		return this.idcliente;
-	}
-
-	public void setIdcliente(int idcliente) {
-		this.idcliente = idcliente;
 	}
 
 	public String getApellido() {

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.GenericGenerator;
+
 
 /**
  * The persistent class for the bancosclientes database table.
@@ -16,15 +18,16 @@ public class Bancoscliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idbancosclientes;
 
 	//bi-directional many-to-one association to Banco
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="idbanco")
 	private Banco banco;
 
 	//bi-directional many-to-one association to Cliente
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="idcliente")
 	private Cliente cliente;
 
