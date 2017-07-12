@@ -23,7 +23,7 @@ public class Tipocuenta implements Serializable {
 	private String nombre;
 
 	//bi-directional many-to-one association to Cuenta
-	@OneToMany(mappedBy="tipocuenta")
+	@OneToMany(cascade={CascadeType.MERGE} ,mappedBy="tipocuenta")
 	private List<Cuenta> cuentas;
 
 	public Tipocuenta() {

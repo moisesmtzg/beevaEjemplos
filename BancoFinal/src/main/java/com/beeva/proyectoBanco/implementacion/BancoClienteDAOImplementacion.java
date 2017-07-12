@@ -33,15 +33,10 @@ public class BancoClienteDAOImplementacion extends BancoClienteDAO{
 
 	@Override
 	@Transactional
-	public ArrayList<Cliente> obtenerClientesBanco(int idBanco) {
-		Query query = em.createQuery("SELECT e FROM bancoclientes e WHERE bancoclientes.idBanco="+idBanco);
-		List<Integer> listaIdClientes = query.getResultList();
-		ClienteDAO cDAO = null;
-		ArrayList<Cliente> listaClientesBanco = new ArrayList<Cliente>();
-		for(int idCliente : listaIdClientes){
-			listaClientesBanco.add(cDAO.getCliente(idCliente));
-		}
-		return listaClientesBanco;
+	public List<Bancoscliente> obtenerClientesBanco(int idBanco) {
+		Query query = em.createQuery("SELECT e FROM Bancoscliente e WHERE e.banco.idbanco = :idbanco").setParameter("idbanco", idBanco);
+		List<Bancoscliente> listaRegreso= query.getResultList();
+		return listaRegreso;
 	}
 
 	@Override

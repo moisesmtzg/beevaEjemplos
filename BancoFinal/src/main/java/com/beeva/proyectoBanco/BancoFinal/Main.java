@@ -1,5 +1,7 @@
 package com.beeva.proyectoBanco.BancoFinal;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ import com.beeva.proyectoBanco.models.Bancoscliente;
 import com.beeva.proyectoBanco.models.Cliente;
 import com.beeva.proyectoBanco.models.Cuenta;
 import com.beeva.proyectoBanco.models.Tipocuenta;
+import com.beeva.proyectoBanco.mongoUtilities.LogMongo;
 
 /**
  * Hello world!
@@ -31,34 +34,108 @@ import com.beeva.proyectoBanco.models.Tipocuenta;
  */
 public class Main 
 {
-    public static void main( String[] args )
-    {
-    	
-    	ApplicationContext context = new ClassPathXmlApplicationContext("core-context.xml");
-    	
-    	Banco banco = new Banco();
-    	banco.setNombre(JOptionPane.showInputDialog("Cual es el nombre del banco"));
-    	BancoDAO bancoDAO = (BancoDAO)context.getBean(BancoDAOImplementacion.class);
-    	Banco banconActual = bancoDAO.agregarBanco(banco);
-    	
-    	Cliente cliente = new Cliente();
-    	cliente.setNombre(JOptionPane.showInputDialog("cual es el nombre del cliente"));
-    	cliente.setApellido(JOptionPane.showInputDialog("cual es el apellido del cliente"));
-    	ClienteDAO clienteDAO = (ClienteDAO)context.getBean(ClienteDAOImplementacion.class);
-    	Cliente clienteActual = clienteDAO.saveCliente(cliente);
-    	
-    	Bancoscliente bancoCliente = new Bancoscliente();
-    	bancoCliente.setBanco(banconActual);
-    	bancoCliente.setCliente(clienteActual);
-    	BancoClienteDAO bancoclienteDAO = (BancoClienteDAO)context.getBean(BancoClienteDAOImplementacion.class);
-    	bancoclienteDAO.agregarClienteBanco(bancoCliente);
-    	
-    	List<Bancoscliente> listaBancoCliente = new ArrayList<Bancoscliente>();
-    	listaBancoCliente.add(bancoCliente);
+	public static void main( String[] args )
+	{
+		LogMongo log = new LogMongo();
+		ApplicationContext context = new ClassPathXmlApplicationContext("core-context.xml");
 
-    	banconActual.setBancosclientes(listaBancoCliente);
-    	clienteActual.setBancosclientes(listaBancoCliente);
-    	
-    	
-    }
+
+		int opcionBanco = Integer.parseInt(JOptionPane.showInputDialog("Deseas agregar un banco 1)si 2 )no (numero) "));
+		while(opcionBanco != 2){
+			Banco banco = new Banco();
+			banco.setNombre(JOptionPane.showInputDialog("Cual es el nombre del banco"));
+			BancoDAO bancoDAO = (BancoDAO)context.getBean(BancoDAOImplementacion.class);
+
+			Banco banconActual = bancoDAO.agregarBanco(banco);
+			log.agregarBanco(banconActual);
+			int opcionCliente = 1;
+			while(opcionCliente !=2){
+				Cliente cliente = new Cliente();
+				cliente.setNombre(JOptionPane.showInputDialog("cual es el nombre del cliente"));
+				cliente.setApellido(JOptionPane.showInputDialog("cual es el apellido del cliente"));
+				ClienteDAO clienteDAO = (ClienteDAO)context.getBean(ClienteDAOImplementacion.class);
+				Cliente clienteActual = clienteDAO.saveCliente(cliente);
+				log.agregarCliente(clienteActual);
+
+				Bancoscliente bancoCliente = new Bancoscliente();
+				bancoCliente.setBanco(banconActual);
+				bancoCliente.setCliente(clienteActual);
+				BancoClienteDAO bancoclienteDAO = (BancoClienteDAO)context.getBean(BancoClienteDAOImplementacion.class);
+				bancoclienteDAO.agregarClienteBanco(bancoCliente);
+
+				List<Bancoscliente> listaBancoCliente = new ArrayList<Bancoscliente>();
+				listaBancoCliente.add(bancoCliente);
+
+				banconActual.setBancosclientes(listaBancoCliente);
+				clienteActual.setBancosclientes(listaBancoCliente);
+
+				int opcionCuenta = 1;
+				while(opcionCuenta != 2){
+					Cuenta cuenta = new Cuenta();
+					cuenta.setCliente(clienteActual);
+					Tipocuenta tp = new Tipocuenta();
+					int tipoCuenta = Integer.parseInt(JOptionPane.showInputDialog("cuenta de tipo 1)Cheque 2)Ahorro (ingresa el número)"));
+					TipoCuentaDAO tipoCuentaDAO = (TipoCuentaDAO)context.getBean(TipoCuentaDAOImplementacion.class);
+					tp = tipoCuentaDAO.getTipoCuenta(tipoCuenta);
+					cuenta.setTipocuenta(tp);
+					BigDecimal b = new BigDecimal(0, MathContext.DECIMAL64);
+					cuenta.setBalance(b);
+					CuentaDAO cuentaDAO = (CuentaDAO)context.getBean(CuentaDAOImplementacion.class);
+					Cuenta cuentaActual = cuentaDAO.agregarCuenta(cuenta);
+					int opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+					while(opcion != 4){
+						switch (opcion){
+						case 1:
+							log.agregarCuenta(cuentaActual);
+							JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+"tiene "+cuentaActual.getBalance());
+							opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+							break;
+						case 2:
+							Double cantidad = Double.parseDouble(JOptionPane.showInputDialog("cual es la cantidad a depositar"));
+							cuentaDAO.deposito(cantidad, clienteActual, cuentaActual);
+							log.agregarCuenta(cuentaActual);
+							JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+"tiene "+cuentaActual.getBalance());
+							opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+							break;
+						case 3:
+							Double cantidadRetiro = Double.parseDouble(JOptionPane.showInputDialog("cual es la cantidad a depositar"));
+							cuentaDAO.retiro(cantidadRetiro,clienteActual, cuentaActual);
+							log.agregarCuenta(cuentaActual);
+							JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+"tiene "+cuentaActual.getBalance());
+							opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+							break;
+						}
+					}
+					opcionCuenta = Integer.parseInt(JOptionPane.showInputDialog("Deseas agregar otra cuenta al cliente 1)si 2)no (numero) "));
+				}
+				opcionCliente = Integer.parseInt(JOptionPane.showInputDialog("Deseas agregar otro cliente al mismo banco 1)si 2)no (numero)"));
+			}
+			opcionBanco = Integer.parseInt(JOptionPane.showInputDialog("Deseas agregar un banco 1)si 2 )no (numero) "));
+		}
+
+
+		Main n = new Main();
+		n.imprimirTodo(context);
+	}
+
+	public void imprimirTodo(ApplicationContext context){
+		BancoDAO bancoDAO  = (BancoDAO)context.getBean(BancoDAOImplementacion.class);
+		BancoClienteDAO bancoClienteDAo = (BancoClienteDAO)context.getBean(BancoClienteDAOImplementacion.class);
+		CuentaDAO cuentaDAO = (CuentaDAO)context.getBean(CuentaDAOImplementacion.class);
+
+		List<Banco>listaBanco = bancoDAO.getAllBancos();
+		for(Banco bancoImprimir : listaBanco){
+			List<Bancoscliente>listaBancoCl =  bancoClienteDAo.obtenerClientesBanco(bancoImprimir.getIdbanco());
+			for(Bancoscliente bc : listaBancoCl){
+				if(bc.getBanco().getIdbanco() == bancoImprimir.getIdbanco()){
+					List<Cuenta> listaCuentasL = cuentaDAO.getTodasCuentas();
+					for(Cuenta cuen : listaCuentasL){
+						if(cuen.getCliente().getIdcliente() == bc.getCliente().getIdcliente()){
+							JOptionPane.showMessageDialog(null, bancoImprimir.getNombre()+" "+ bc.getCliente()+" "+cuen.toString()+" "+cuen.getTipocuenta().getNombre());
+						}
+					}
+				}
+			}
+		}
+	}
 }

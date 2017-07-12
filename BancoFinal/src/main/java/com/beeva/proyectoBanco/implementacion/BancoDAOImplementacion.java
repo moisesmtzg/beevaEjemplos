@@ -1,6 +1,7 @@
 package com.beeva.proyectoBanco.implementacion;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -39,6 +40,14 @@ public class BancoDAOImplementacion extends BancoDAO{
 		Banco b = obtenerBanco(idBanco);
 		em.remove(b);
 		
+	}
+
+	@Override
+	@Transactional
+	public List<Banco> getAllBancos() {
+		Query query = em.createNativeQuery("SELECT * FROM banco;",Banco.class);
+		List<Banco> listaB =query.getResultList();
+		return listaB;
 	}
 
 

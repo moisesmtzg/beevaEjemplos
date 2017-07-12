@@ -7,7 +7,7 @@ import com.beeva.MODEL.Banco;
 import com.beeva.MODEL.Cliente;
 import com.beeva.MODEL.Cuenta;
 
-import com.beeva.BancoMySQLJDBC.BancoMySQLJDBC.Conexion.*;
+import Conexion.Conexion;
 
 /**
  * Hello world!

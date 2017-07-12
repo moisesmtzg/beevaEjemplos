@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/batch
+http://www.springframework.org/schema/batch/spring-batch.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<import resource="classpath:core-context.xml" />
+
+	<batch:job id="processFileJob" job-repository="jobRepository">
+		<batch:step id="processFileStep1">
+			<batch:tasklet>
+				<batch:chunk reader="processFileItemReader" processor="fileProcess"
+					writer="processFileXMLWriter" commit-interval="2"></batch:chunk>
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+
+	<bean id="processFileItemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
+		<property name="resource" value="${input.file}"></property>
+		<property name="lineMapper" ref="processFileLineMapper"></property>
+	</bean>
+
+	<bean id="processFileLineMapper"
+		class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+		<property name="fieldSetMapper" ref="elementAutoFieldSetMapper"></property>
+		<property name="lineTokenizer" ref="processFileLengthLineTokenizer"></property>
+	</bean>
+
+	<bean id="processFileLengthLineTokenizer"
+		class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+		<property name="names" value="nombre,apellido,edad,empresa,sitio,area"></property>
+		<property name="delimiter" value="|"></property>
+	</bean>
+
+	<bean id="elementAutoFieldSetMapper"
+		class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+		<property name="prototypeBeanName" value="element"></property>
+	</bean>
+
+	<bean id="element"
+		class="com.beeva.SpringBatch.SpringBatch.job.fileProcessor.models.Empleado"
+		scope="prototype"></bean>
+
+	<bean id="processFileXMLWriter" class="org.springframework.batch.item.file.FlatFileItemWriter">
+		<property name="resource" value="${output.file}"></property>
+		<property name="shouldDeleteIfExists" value="true"></property>
+		<property name="lineAggregator">
+			<bean
+				class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+				<property name="delimiter" value=","></property>
+				<property name="fieldExtractor">
+					<bean
+						class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+						<property name="names" value="nombre,apellido"></property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="fileProcess"
+		class="com.beeva.SpringBatch.SpringBatch.fileProcessor.process.FileProcess"></bean>
+
+</beans>
+

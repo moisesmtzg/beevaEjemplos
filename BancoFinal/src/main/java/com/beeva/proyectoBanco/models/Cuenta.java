@@ -24,12 +24,12 @@ public class Cuenta implements Serializable {
 	private BigDecimal balance;
 
 	//bi-directional many-to-one association to Cliente
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="idcliente")
 	private Cliente cliente;
 
 	//bi-directional many-to-one association to Tipocuenta
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="idtipocuenta")
 	private Tipocuenta tipocuenta;
 
@@ -68,4 +68,11 @@ public class Cuenta implements Serializable {
 		this.tipocuenta = tipocuenta;
 	}
 
+	@Override
+	public String toString() {
+		return "Cuenta [balance=" + balance +"]";
+	}
+
+	
+	
 }
