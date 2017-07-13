@@ -87,24 +87,33 @@ public class Main
 						switch (opcion){
 						case 1:
 							log.agregarCuenta(cuentaActual);
-							JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+"tiene "+cuentaActual.getBalance());
+							JOptionPane.showMessageDialog(null, "la cuenta :" +cuentaActual.getIdcuenta()+"   tiene  $"+cuentaActual.getBalance());
 							opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
 							break;
 						case 2:
 							Double cantidad = Double.parseDouble(JOptionPane.showInputDialog("cual es la cantidad a depositar"));
-							cuentaDAO.deposito(cantidad, clienteActual, cuentaActual);
-							log.agregarCuenta(cuentaActual);
-							JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+"tiene "+cuentaActual.getBalance());
-							opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+							if(cuentaDAO.deposito(cantidad, clienteActual, cuentaActual) == false){
+								JOptionPane.showMessageDialog(null, "A la cuenta " +cuentaActual.getIdcuenta()+" no se le pudo realizar el deposito ");
+								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+							}else{
+								log.agregarCuenta(cuentaActual);
+								JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+" tiene $"+cuentaActual.getBalance());
+								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+							}
 							break;
 						case 3:
-							Double cantidadRetiro = Double.parseDouble(JOptionPane.showInputDialog("cual es la cantidad a depositar"));
-							cuentaDAO.retiro(cantidadRetiro,clienteActual, cuentaActual);
-							log.agregarCuenta(cuentaActual);
-							JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+"tiene "+cuentaActual.getBalance());
-							opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+							Double cantidadRetiro = Double.parseDouble(JOptionPane.showInputDialog("cual es la cantidad a retirar"));
+							if(cuentaDAO.retiro(cantidadRetiro,clienteActual, cuentaActual) == false){
+								JOptionPane.showMessageDialog(null, "No se pudo realizar el retiro a la cuenta " +cuentaActual.getIdcuenta()+" ya que no tiene los fondos suficientes o es fin de semana");
+								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+							}else{
+								log.agregarCuenta(cuentaActual);
+								JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+"tiene "+cuentaActual.getBalance());
+								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+							}
 							break;
 						}
+						
 					}
 					opcionCuenta = Integer.parseInt(JOptionPane.showInputDialog("Deseas agregar otra cuenta al cliente 1)si 2)no (numero) "));
 				}

@@ -54,34 +54,38 @@ public class CuentaDAOImplementacion extends CuentaDAO{
 			Date now= new Date();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE");
 			String dia = dateFormat.format(now).toString();
-			if(dia.equals("Saturday") || dia.equals("Sunday")){
+			if(dia.equals("sabado") || dia.equals("domingo") && cuenta.getTipocuenta().getIdtipocuenta() == 1){
 				bandera = false;
 			}else{
 				if(cuenta.getTipocuenta().getIdtipocuenta() == 1){
 					Double cantidadCuenta = cuenta.getBalance().doubleValue();
-					if(cantidadCuenta < cantidad){
+					if(cantidadCuenta < cantidad || cantidadCuenta <5000){
 						bandera = false;
 					}else{
-						BigDecimal res = null;
-						res.valueOf((cantidadCuenta-cantidad));
+						double resp = cantidadCuenta-cantidad;
+						BigDecimal res = new BigDecimal(resp, MathContext.DECIMAL64);
+						System.out.println(res);
 						cuenta.setBalance(res);
 						em.merge(cuenta);
 						bandera = true;
 					}
-				}else if(cuenta.getTipocuenta().getIdtipocuenta() == 2){
-					Double cantidadCuenta = cuenta.getBalance().doubleValue();
-					if(cantidadCuenta < cantidad){
-						bandera = false;
+				}
+
+			}
+			if(cuenta.getTipocuenta().getIdtipocuenta() == 2){
+				Double cantidadCuenta = cuenta.getBalance().doubleValue();
+				if(cantidadCuenta < cantidad){
+					bandera = false;
+				}else{
+					if(cantidadCuenta>5000){
+						double resp = cantidadCuenta-cantidad;
+						BigDecimal res = new BigDecimal(resp, MathContext.DECIMAL64);
+						System.out.println(res);
+						cuenta.setBalance(res);
+						em.merge(cuenta);
+						bandera = true;
 					}else{
-						if(cantidadCuenta>5000){
-							BigDecimal res = null;
-							res.valueOf((cantidadCuenta-cantidad));
-							cuenta.setBalance(res);
-							em.merge(cuenta);
-							bandera = true;
-						}else{
-							bandera = false;
-						}
+						bandera = false;
 					}
 				}
 			}
