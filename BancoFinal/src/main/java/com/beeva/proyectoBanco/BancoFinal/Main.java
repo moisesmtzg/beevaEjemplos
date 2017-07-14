@@ -28,6 +28,8 @@ import com.beeva.proyectoBanco.models.Cuenta;
 import com.beeva.proyectoBanco.models.Tipocuenta;
 import com.beeva.proyectoBanco.mongoUtilities.LogMongo;
 import com.beeva.proyectoBanco.utilities.Condiciones;
+import com.beeva.proyectoBanco.utilities.DroolsUtilities;
+import com.beeva.proyectoBanco.utilities.Sospecha;
 
 /**
  * Hello world!
@@ -37,11 +39,21 @@ public class Main
 {
 	public static void main( String[] args )
 	{
-		//LogMongo log = new LogMongo();
+				
+		LogMongo log = new LogMongo();
 		Condiciones condiciones = new Condiciones();
 		ApplicationContext context = new ClassPathXmlApplicationContext("core-context.xml");
 
+		//Agregar tipos de cuenta a la base
+		Tipocuenta tipoCuenta1  = new Tipocuenta();
+		tipoCuenta1.setNombre("cheque");
+		Tipocuenta tipoCuenta2  = new Tipocuenta();
+		tipoCuenta2.setNombre("ahorro");
+		TipoCuentaDAO tipoCuentaDAOInit = (TipoCuentaDAO)context.getBean(TipoCuentaDAOImplementacion.class);
+		tipoCuentaDAOInit.agregarTipoCuenta(tipoCuenta1);
+		tipoCuentaDAOInit.agregarTipoCuenta(tipoCuenta2);
 
+		
 		int opcionBanco = Integer.parseInt(JOptionPane.showInputDialog("Deseas agregar un banco 1)si 2 )no (numero) "));
 		while(opcionBanco != 2){
 			Banco banco = new Banco();
@@ -54,7 +66,7 @@ public class Main
 			BancoDAO bancoDAO = (BancoDAO)context.getBean(BancoDAOImplementacion.class);
 
 			Banco banconActual = bancoDAO.agregarBanco(banco);
-			//log.agregar(banconActual);
+			log.agregar(banconActual);
 			int opcionCliente = 1;
 			while(opcionCliente !=2){
 				Cliente cliente = new Cliente();
@@ -72,7 +84,7 @@ public class Main
 				cliente.setApellido(apellidoCliente);
 				ClienteDAO clienteDAO = (ClienteDAO)context.getBean(ClienteDAOImplementacion.class);
 				Cliente clienteActual = clienteDAO.saveCliente(cliente);
-				//log.agregar(clienteActual);
+				log.agregar(clienteActual);
 
 				Bancoscliente bancoCliente = new Bancoscliente();
 				bancoCliente.setBanco(banconActual);
@@ -103,12 +115,18 @@ public class Main
 					while(opcion != 4){
 						switch (opcion){
 						case 1:
-							//log.agregar(cuentaActual);
+							log.agregar(cuentaActual);
 							JOptionPane.showMessageDialog(null, "la cuenta :" +cuentaActual.getIdcuenta()+"   tiene  $"+cuentaActual.getBalance());
 							opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
 							break;
 						case 2:
 							Double cantidad = Double.parseDouble(JOptionPane.showInputDialog("cual es la cantidad a depositar"));
+							DroolsUtilities du = new DroolsUtilities();
+							Sospecha sos = new Sospecha();
+							sos.setCantidad(cantidad);
+							sos.setBalance(cuentaActual.getBalance().doubleValue());
+							sos.setTipoCuenta(cuentaActual.getTipocuenta().getIdtipocuenta());
+							du.calcularSospecha(sos);
 							while(condiciones.cantidadCorrecta(cantidad) == false){
 								JOptionPane.showMessageDialog(null, "la cantidad debe de ser positiva");
 								cantidad = Double.parseDouble(JOptionPane.showInputDialog("cual es la cantidad a depositar"));
@@ -117,7 +135,7 @@ public class Main
 								JOptionPane.showMessageDialog(null, "A la cuenta " +cuentaActual.getIdcuenta()+" no se le pudo realizar el deposito ");
 								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
 							}else{
-								//log.agregar(cuentaActual);
+								log.agregar(cuentaActual);
 								JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+" tiene $"+cuentaActual.getBalance());
 								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
 							}
@@ -132,7 +150,7 @@ public class Main
 								JOptionPane.showMessageDialog(null, "No se pudo realizar el retiro a la cuenta " +cuentaActual.getIdcuenta()+" ya que no tiene los fondos suficientes o es fin de semana");
 								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
 							}else{
-								//log.agregar(cuentaActual);
+								log.agregar(cuentaActual);
 								JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+"tiene "+cuentaActual.getBalance());
 								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
 							}
@@ -146,10 +164,11 @@ public class Main
 			}
 			opcionBanco = Integer.parseInt(JOptionPane.showInputDialog("Deseas agregar un banco 1)si 2 )no (numero) "));
 		}
-
-
+	
+		
 		Main n = new Main();
 		n.imprimirTodo(context);
+		
 	}
 
 	public void imprimirTodo(ApplicationContext context){

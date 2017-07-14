@@ -23,7 +23,7 @@ public class LogMongo {
 		conectar.Conect();
 		DB db = conectar.getMongo().getDB("BancoDB");
 		fecha = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-		DBCollection tabla = db.getCollection("registroBanco");
+		DBCollection tabla = db.getCollection("Log");
 		BasicDBObject document = new BasicDBObject();
 		document.put("nombreBanco", banco.getNombre());
 		document.put("idBancoDB", banco.getIdbanco());
@@ -35,7 +35,7 @@ public class LogMongo {
 		conectar.Conect();
 		DB db = conectar.getMongo().getDB("BancoDB");
 		fecha = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-		DBCollection tabla = db.getCollection("registroBanco");
+		DBCollection tabla = db.getCollection("Log");
 		BasicDBObject document = new BasicDBObject();
 		document.put("tipoCuenta", cuenta.getTipocuenta().getNombre());
 		document.put("idCuentaDB", cuenta.getIdcuenta());
@@ -49,7 +49,7 @@ public class LogMongo {
 		conectar.Conect();
 		DB db = conectar.getMongo().getDB("BancoDB");
 		fecha = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-		DBCollection tabla = db.getCollection("registroBanco");
+		DBCollection tabla = db.getCollection("Log");
 		BasicDBObject document = new BasicDBObject();
 		document.put("nombreCliente", cliente.getNombre());
 		document.put("apellidoCliente", cliente.getApellido());

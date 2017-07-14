@@ -21,4 +21,11 @@ public class TipoCuentaDAOImplementacion extends TipoCuentaDAO{
 		return em.find(Tipocuenta.class, idTipoCuenta);
 	}
 
+	@Override
+	@Transactional
+	public void agregarTipoCuenta(Tipocuenta tipocuenta) {
+		em.persist(tipocuenta);
+		
+	}
+
 }

@@ -6,4 +6,5 @@ public abstract class TipoCuentaDAO {
 	
 	
 	public abstract Tipocuenta getTipoCuenta(int idTipoCuenta);
+	public abstract void agregarTipoCuenta(Tipocuenta tipocuenta);
 }
