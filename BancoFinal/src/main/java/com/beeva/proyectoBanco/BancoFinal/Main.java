@@ -9,7 +9,6 @@ import javax.swing.JOptionPane;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.w3c.dom.ls.LSInput;
 
 import com.beeva.proyectoBanco.DAO.BancoClienteDAO;
 import com.beeva.proyectoBanco.DAO.BancoDAO;
@@ -43,7 +42,8 @@ public class Main
 		LogMongo log = new LogMongo();
 		Condiciones condiciones = new Condiciones();
 		ApplicationContext context = new ClassPathXmlApplicationContext("core-context.xml");
-
+		String palabraNoValida = "Palabra contiene caracteres no validos";
+		String opcionesCuenta = "Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)";
 		//Agregar tipos de cuenta a la base
 		Tipocuenta tipoCuenta1  = new Tipocuenta();
 		tipoCuenta1.setNombre("cheque");
@@ -59,7 +59,7 @@ public class Main
 			Banco banco = new Banco();
 			String nombreBanco =JOptionPane.showInputDialog("Cual es el nombre del banco");
 			while(condiciones.palabraCorrecta(nombreBanco) == false){
-				JOptionPane.showMessageDialog(null, "Palabra contiene caracteres no validos");
+				JOptionPane.showMessageDialog(null, palabraNoValida );
 				nombreBanco =JOptionPane.showInputDialog("Cual es el nombre del banco");
 			}
 			banco.setNombre(nombreBanco);
@@ -72,13 +72,13 @@ public class Main
 				Cliente cliente = new Cliente();
 				String nombreCliente =JOptionPane.showInputDialog("cual es el nombre del cliente"); 
 				while(condiciones.palabraCorrecta(nombreCliente) == false){
-					JOptionPane.showMessageDialog(null, "Palabra contiene caracteres no validos");
+					JOptionPane.showMessageDialog(null, palabraNoValida);
 					nombreCliente =JOptionPane.showInputDialog("cual es el nombre del cliente");
 				}
 				cliente.setNombre(nombreCliente);
 				String apellidoCliente = JOptionPane.showInputDialog("cual es el apellido del cliente");
 				while(condiciones.palabraCorrecta(apellidoCliente) == false){
-					JOptionPane.showMessageDialog(null, "Palabra contiene caracteres no validos");
+					JOptionPane.showMessageDialog(null, palabraNoValida);
 					apellidoCliente = JOptionPane.showInputDialog("cual es el apellido del cliente");
 				}
 				cliente.setApellido(apellidoCliente);
@@ -102,7 +102,7 @@ public class Main
 				while(opcionCuenta != 2){
 					Cuenta cuenta = new Cuenta();
 					cuenta.setCliente(clienteActual);
-					Tipocuenta tp = new Tipocuenta();
+					Tipocuenta tp;
 					int tipoCuenta = Integer.parseInt(JOptionPane.showInputDialog("cuenta de tipo 1)Cheque 2)Ahorro (ingresa el número)"));
 					TipoCuentaDAO tipoCuentaDAO = (TipoCuentaDAO)context.getBean(TipoCuentaDAOImplementacion.class);
 					tp = tipoCuentaDAO.getTipoCuenta(tipoCuenta);
@@ -111,13 +111,13 @@ public class Main
 					cuenta.setBalance(b);
 					CuentaDAO cuentaDAO = (CuentaDAO)context.getBean(CuentaDAOImplementacion.class);
 					Cuenta cuentaActual = cuentaDAO.agregarCuenta(cuenta);
-					int opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+					int opcion = Integer.parseInt(JOptionPane.showInputDialog(opcionCuenta));
 					while(opcion != 4){
 						switch (opcion){
 						case 1:
 							log.agregar(cuentaActual);
 							JOptionPane.showMessageDialog(null, "la cuenta :" +cuentaActual.getIdcuenta()+"   tiene  $"+cuentaActual.getBalance());
-							opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+							opcion = Integer.parseInt(JOptionPane.showInputDialog(opcionesCuenta));
 							break;
 						case 2:
 							Double cantidad = Double.parseDouble(JOptionPane.showInputDialog("cual es la cantidad a depositar"));
@@ -133,11 +133,11 @@ public class Main
 							}
 							if(cuentaDAO.deposito(cantidad, clienteActual, cuentaActual) == false){
 								JOptionPane.showMessageDialog(null, "A la cuenta " +cuentaActual.getIdcuenta()+" no se le pudo realizar el deposito ");
-								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+								opcion = Integer.parseInt(JOptionPane.showInputDialog(opcionesCuenta));
 							}else{
 								log.agregar(cuentaActual);
 								JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+" tiene $"+cuentaActual.getBalance());
-								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+								opcion = Integer.parseInt(JOptionPane.showInputDialog(opcionesCuenta));
 							}
 							break;
 						case 3:
@@ -148,11 +148,11 @@ public class Main
 							}
 							if(cuentaDAO.retiro(cantidadRetiro,clienteActual, cuentaActual) == false){
 								JOptionPane.showMessageDialog(null, "No se pudo realizar el retiro a la cuenta " +cuentaActual.getIdcuenta()+" ya que no tiene los fondos suficientes o es fin de semana");
-								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+								opcion = Integer.parseInt(JOptionPane.showInputDialog(opcionesCuenta));
 							}else{
 								log.agregar(cuentaActual);
 								JOptionPane.showMessageDialog(null, "la cuenta " +cuentaActual.getIdcuenta()+"tiene "+cuentaActual.getBalance());
-								opcion = Integer.parseInt(JOptionPane.showInputDialog("Que deseas hacer 1)Saldo 2)Deposito 3)Retiro 4)Salir (numero)"));
+								opcion = Integer.parseInt(JOptionPane.showInputDialog(opcionesCuenta));
 							}
 							break;
 						}

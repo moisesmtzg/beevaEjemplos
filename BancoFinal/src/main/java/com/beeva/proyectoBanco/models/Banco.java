@@ -27,9 +27,6 @@ public class Banco implements Serializable {
 	@OneToMany(mappedBy="banco")
 	private List<Bancoscliente> bancosclientes;
 
-	public Banco() {
-	}
-
 	public int getIdbanco() {
 		return this.idbanco;
 	}

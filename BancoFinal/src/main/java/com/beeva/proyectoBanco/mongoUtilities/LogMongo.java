@@ -20,7 +20,7 @@ public class LogMongo {
 	}
 	
 	public void agregar(Banco banco){
-		conectar.Conect();
+		conectar.MongoConectar();
 		DB db = conectar.getMongo().getDB("BancoDB");
 		fecha = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 		DBCollection tabla = db.getCollection("Log");
@@ -32,7 +32,7 @@ public class LogMongo {
 	}
 	
 	public void agregar(Cuenta cuenta){
-		conectar.Conect();
+		conectar.MongoConectar();
 		DB db = conectar.getMongo().getDB("BancoDB");
 		fecha = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 		DBCollection tabla = db.getCollection("Log");
@@ -46,7 +46,7 @@ public class LogMongo {
 	}
 	
 	public void agregar(Cliente cliente){
-		conectar.Conect();
+		conectar.MongoConectar();
 		DB db = conectar.getMongo().getDB("BancoDB");
 		fecha = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 		DBCollection tabla = db.getCollection("Log");

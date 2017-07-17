@@ -1,8 +1,8 @@
 package com.beeva.proyectoBanco.mongoUtilities;
 
-import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
 public class Conectar {
@@ -10,7 +10,7 @@ public class Conectar {
 	String param = "localhost";
 	int puerto = 27017;
 	MongoClient mongo;
-	
+	private static final Logger LOGGER = Logger.getLogger( Conectar.class.getName() );
 	
 	
 	public String getParam() {
@@ -47,14 +47,12 @@ public class Conectar {
 
 
 
-	public void Conect(){
+	public void MongoConectar(){
 		mongo = null;
 		try {
 			mongo = new MongoClient(param,puerto);
-			System.out.println("conexion exiosa");
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.log(Level.FINE,"context", e);
 		}
 	}
 }

@@ -9,25 +9,18 @@ import com.beeva.proyectoBanco.models.Cuenta;
 
 public class DroolsUtilities {
 
-	public DroolsUtilities(){
-
-	}
-
 	public void calcularSospecha(Sospecha sospecha){
 
-		try{
 			KieServices ks = KieServices.Factory.get();
 			KieContainer kContainer = ks.getKieClasspathContainer();
 			KieSession ksession = kContainer.newKieSession("ksession-rule");
 
-			FactHandle factl;
-			factl= ksession.insert(sospecha);
+			@SuppressWarnings("unused")
+			FactHandle factl= ksession.insert(sospecha);
 			ksession.fireAllRules();
 			
-			System.out.println(sospecha.getResultado());
-		}catch(Throwable t){
-    		t.printStackTrace();
-    	}
+			System.err.println(sospecha.getResultado());
+	
 	}
 
 }

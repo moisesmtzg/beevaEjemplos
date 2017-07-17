@@ -13,9 +13,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import com.beeva.proyectoBanco.DAO.ClienteDAO;
 import com.beeva.proyectoBanco.DAO.CuentaDAO;
-import com.beeva.proyectoBanco.models.Banco;
 import com.beeva.proyectoBanco.models.Cliente;
 import com.beeva.proyectoBanco.models.Cuenta;
 
@@ -33,8 +31,7 @@ public class CuentaDAOImplementacion extends CuentaDAO{
 			BigDecimal bd = cuenta.getBalance();
 			double balance = bd.doubleValue();
 			double newBalance = balance+cantidad;
-			BigDecimal b = new BigDecimal(newBalance, MathContext.DECIMAL64);
-			cuenta.setBalance(b);
+			cuenta.setBalance(BigDecimal.valueOf(newBalance));
 			if(em.merge(cuenta) == null){
 				bandera = false;
 			}else{
@@ -63,9 +60,7 @@ public class CuentaDAOImplementacion extends CuentaDAO{
 						bandera = false;
 					}else{
 						double resp = cantidadCuenta-cantidad;
-						BigDecimal res = new BigDecimal(resp, MathContext.DECIMAL64);
-						System.out.println(res);
-						cuenta.setBalance(res);
+						cuenta.setBalance(BigDecimal.valueOf(resp));
 						em.merge(cuenta);
 						bandera = true;
 					}
@@ -79,9 +74,7 @@ public class CuentaDAOImplementacion extends CuentaDAO{
 				}else{
 					if(cantidadCuenta>5000){
 						double resp = cantidadCuenta-cantidad;
-						BigDecimal res = new BigDecimal(resp, MathContext.DECIMAL64);
-						System.out.println(res);
-						cuenta.setBalance(res);
+						cuenta.setBalance(BigDecimal.valueOf(resp));
 						em.merge(cuenta);
 						bandera = true;
 					}else{
